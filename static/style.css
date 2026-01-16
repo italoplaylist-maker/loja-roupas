@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+/* ===== LAYOUT ===== */
+.wrapper {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+    width: 210px;
+    background: #020617;
+    padding: 20px 15px;
+}
+
+.sidebar h2 {
+    color: #fff;
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    transition: .2s;
+}
+
+.sidebar a:hover {
+    background: #0f172a;
+    color: #fff;
+}
+
+/* ===== CONTEÚDO ===== */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TOPO */
+.topbar {
+    background: #fff;
+    padding: 15px 25px;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 600;
+}
+
+/* CONTEÚDO */
+.content {
+    padding: 25px;
+}
+
+/* ===== CARDS ===== */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,.06);
+}
+
+.card span {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.card h3 {
+    margin-top: 10px;
+    font-size: 26px;
+    font-weight: 700;
+}

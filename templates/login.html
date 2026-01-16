@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login | Loja</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+
+  <div class="login-card">
+    <h2>Entrar no Sistema</h2>
+
+    {% if erro %}
+      <div class="error">{{ erro }}</div>
+    {% endif %}
+
+    <form method="POST">
+      <div class="form-group">
+        <label>Usuário</label>
+        <input type="text" name="usuario" required>
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" name="senha" required>
+      </div>
+
+      <button class="btn-login">Entrar</button>
+    </form>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Loja{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="wrapper">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>LOJA</h2>
+        <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('listar_produtos') }}">👕 Produtos</a>
+        <a href="{{ url_for('novo_produto') }}">➕ Novo Produto</a>
+        <a href="#">👥 Clientes</a>
+        <a href="#">💰 Vendas</a>
+        <a href="{{ url_for('logout') }}">🚪 Sair</a>
+    </aside>
+
+    <!-- CONTEÚDO -->
+    <main class="main">
+        <div class="topbar">
+            {% block header %}{% endblock %}
+        </div>
+
+        <section class="content">
+            {% block content %}{% endblock %}
+        </section>
+    </main>
+
+</div>
+
+</body>
+</html>

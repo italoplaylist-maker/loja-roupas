@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Produto{% endblock %}
+
+{% block header %}
+Editar Produto
+{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:500px;">
+    <form method="POST">
+
+        <span>Nome do produto</span>
+        <input type="text" name="nome" required
+            value="{{ produto.nome }}"
+            style="width:100%;padding:10px;margin-top:8px;margin-bottom:15px;">
+
+        <span>Preço</span>
+        <input type="number" step="0.01" name="preco" required
+            value="{{ produto.preco }}"
+            style="width:100%;padding:10px;margin-top:8px;margin-bottom:15px;">
+
+        <span>Quantidade</span>
+        <input type="number" name="quantidade" required
+            value="{{ produto.quantidade }}"
+            style="width:100%;padding:10px;margin-top:8px;margin-bottom:20px;">
+
+        <button style="
+            background:#020617;
+            color:#fff;
+            border:none;
+            padding:12px 18px;
+            border-radius:8px;
+            cursor:pointer;">
+            Salvar Alterações
+        </button>
+
+        <a href="{{ url_for('listar_produtos') }}"
+           style="margin-left:15px;color:#374151;">
+            Cancelar
+        </a>
+
+    </form>
+</div>
+{% endblock %}

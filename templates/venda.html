@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Venda</title>
+</head>
+<body>
+    <h2>Registrar Venda</h2>
+
+    {% if erro %}
+        <p style="color:red">{{ erro }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <select name="produto" required>
+            {% for p in produtos %}
+                <option value="{{ p.id }}">
+                    {{ p.nome }} (Estoque: {{ p.estoque }})
+                </option>
+            {% endfor %}
+        </select>
+        <br><br>
+
+        <input type="number" name="quantidade" placeholder="Quantidade" required>
+        <br><br>
+
+        <button type="submit">Vender</button>
+    </form>
+
+    <br>
+    <a href="{{ url_for('dashboard') }}">Voltar</a>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block header %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+
+    <div class="card">
+        <span style="color:#64748b;">Produtos cadastrados</span>
+        <h2 style="margin-top:10px;">{{ total_produtos }}</h2>
+    </div>
+
+    <div class="card">
+        <span style="color:#64748b;">Itens em estoque</span>
+        <h2 style="margin-top:10px;">{{ total_estoque }}</h2>
+    </div>
+
+    <div class="card">
+        <span style="color:#64748b;">Valor total do estoque</span>
+        <h2 style="margin-top:10px;">
+            R$ {{ "%.2f"|format(valor_total) }}
+        </h2>
+    </div>
+
+</div>
+
+{% endblock %}
