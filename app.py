@@ -6,6 +6,8 @@ from flask_login import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 
@@ -21,6 +23,10 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = "login"
 
+UPLOAD_FOLDER = "static/uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+
 # =====================
 # MODELO DE USUÁRIO
 # =====================
@@ -34,6 +40,7 @@ class Produto(db.Model):
     nome = db.Column(db.String(100), nullable=False)
     preco = db.Column(db.Float, nullable=False)
     quantidade = db.Column(db.Integer, nullable=False)
+    imagem = db.Column(db.String(200))
 
 class Venda(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -138,17 +145,27 @@ def novo_produto():
         preco = float(request.form["preco"])
         quantidade = int(request.form["quantidade"])
 
+        imagem = request.files["imagem"]
+        nome_imagem = None
+
+        if imagem:
+            nome_imagem = secure_filename(imagem.filename)
+            caminho = os.path.join(app.config["UPLOAD_FOLDER"], nome_imagem)
+            imagem.save(caminho)
+
         produto = Produto(
             nome=nome,
             preco=preco,
-            quantidade=quantidade
+            quantidade=quantidade,
+            imagem=nome_imagem
         )
+
         db.session.add(produto)
         db.session.commit()
-
         return redirect(url_for("listar_produtos"))
 
     return render_template("novo_produto.html")
+
 
 
 @app.route("/produtos")

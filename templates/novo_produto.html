@@ -8,7 +8,7 @@ Novo Produto
 
 {% block content %}
 <div class="card" style="max-width:500px;">
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         <span>Nome do produto</span>
         <input type="text" name="nome" required
             style="width:100%;padding:10px;margin-top:8px;margin-bottom:15px;">
@@ -20,6 +20,10 @@ Novo Produto
         <span>Quantidade</span>
         <input type="number" name="quantidade" required
             style="width:100%;padding:10px;margin-top:8px;margin-bottom:20px;">
+
+        <span>Imagem do produto</span>
+        <input type="file" name="imagem" accept="image/*"
+            style="width:100%;padding:10px;margin-bottom:20px;">
 
         <button style="
             background:#020617;
