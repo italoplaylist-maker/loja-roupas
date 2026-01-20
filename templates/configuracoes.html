@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Configurações{% endblock %}
+{% block header %}Configurações{% endblock %}
+
+{% block content %}
+<div class="card">
+    {% if sucesso %}
+        <div class="alert success">{{ sucesso }}</div>
+    {% endif %}
+
+    <form method="POST">
+        <label>Nome da loja</label>
+        <input type="text" name="nome_loja" value="{{ config.nome_loja }}" required>
+
+        <label>Cor primária</label>
+        <input type="color" name="cor_primaria" value="{{ config.cor_primaria }}">
+
+        <label>Cor de sucesso</label>
+        <input type="color" name="cor_sucesso" value="{{ config.cor_sucesso }}">
+
+        <label>Cor de perigo</label>
+        <input type="color" name="cor_perigo" value="{{ config.cor_perigo }}">
+
+        <button type="submit">Salvar Configurações</button>
+    </form>
+</div>
+{% endblock %}

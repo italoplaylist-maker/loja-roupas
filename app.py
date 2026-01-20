@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import (
     LoginManager, UserMixin,
-    login_user, login_required, logout_user
+    login_user, login_required, logout_user, current_user
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -62,9 +62,18 @@ class Venda(db.Model):
     produto = db.relationship("Produto")
 
 
+class Configuracao(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nome_loja = db.Column(db.String(100), default="A Menina da Loja")
+    cor_primaria = db.Column(db.String(7), default="#2563eb")  # hexadecimal
+    cor_sucesso = db.Column(db.String(7), default="#16a34a")
+    cor_perigo = db.Column(db.String(7), default="#dc2626")
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
+
 
 # =====================
 # FUNÇÕES AUXILIARES
@@ -362,6 +371,112 @@ def editar_venda(venda_id):
 
     return render_template("venda_editar.html", venda=venda)
 
+
+
+@app.route("/configuracoes", methods=["GET", "POST"])
+@login_required
+def configuracoes():
+    config = Configuracao.query.first()  # pega a única configuração
+
+    if request.method == "POST":
+        config.nome_loja = request.form.get("nome_loja", config.nome_loja)
+        config.cor_primaria = request.form.get("cor_primaria", config.cor_primaria)
+        config.cor_sucesso = request.form.get("cor_sucesso", config.cor_sucesso)
+        config.cor_perigo = request.form.get("cor_perigo", config.cor_perigo)
+
+        db.session.commit()
+        sucesso = "Configurações salvas com sucesso!"
+        return render_template("configuracoes.html", config=config, sucesso=sucesso)
+
+    return render_template("configuracoes.html", config=config)
+
+
+# =====================
+# USUÁRIOS
+# =====================
+@app.route("/configuracoes/usuarios")
+@login_required
+def configuracoes_usuarios():
+    usuarios = Usuario.query.all()
+    return render_template("configuracoes_usuarios.html", usuarios=usuarios)
+
+
+@app.route("/configuracoes/usuarios/novo", methods=["POST"])
+@login_required
+def novo_usuario():
+    usuario = request.form.get("usuario")
+    senha = request.form.get("senha")
+    senha_confirm = request.form.get("senha_confirm")
+
+    # Validações
+    if not usuario or not senha:
+        return "Preencha todos os campos", 400
+
+    if senha != senha_confirm:
+        return "As senhas não conferem", 400
+
+    if Usuario.query.filter_by(usuario=usuario).first():
+        return "Usuário já existe", 400
+
+    db.session.add(
+        Usuario(
+            usuario=usuario,
+            senha=generate_password_hash(senha)
+        )
+    )
+    db.session.commit()
+    return redirect(url_for("configuracoes_usuarios"))
+
+
+@app.route("/configuracoes/usuarios/editar/<int:user_id>", methods=["GET", "POST"])
+@login_required
+def editar_usuario(user_id):
+    usuario = Usuario.query.get_or_404(user_id)
+
+    if request.method == "POST":
+        novo_nome = request.form.get("usuario")
+        nova_senha = request.form.get("senha")
+        nova_senha_confirm = request.form.get("senha_confirm")
+
+        if not novo_nome:
+            return "Nome de usuário é obrigatório", 400
+
+        if nova_senha and nova_senha != nova_senha_confirm:
+            return "Senhas não conferem", 400
+
+        # Atualiza
+        usuario.usuario = novo_nome
+        if nova_senha:
+            usuario.senha = generate_password_hash(nova_senha)
+
+        db.session.commit()
+        return redirect(url_for("configuracoes_usuarios"))
+
+    return render_template("editar_usuario.html", usuario=usuario)
+
+
+@app.route("/configuracoes/usuarios/excluir/<int:user_id>")
+@login_required
+def excluir_usuario(user_id):
+    usuario = Usuario.query.get_or_404(user_id)
+
+    # Não permite excluir o usuário logado
+    if usuario.id == current_user.id:
+        return "Não é possível excluir o usuário logado", 400
+
+    db.session.delete(usuario)
+    db.session.commit()
+    return redirect(url_for("configuracoes_usuarios"))
+
+
+
+@app.context_processor
+def inject_config():
+    config = Configuracao.query.first()
+    return dict(config=config)
+
+
+
 # =====================
 # INIT
 # =====================
@@ -379,6 +494,10 @@ with app.app_context():
             )
         )
         db.session.commit()
+
+    if not Configuracao.query.first():
+        db.session.add(Configuracao())
+        db.session.commit()    
 
 if __name__ == "__main__":
     app.run(debug=True)

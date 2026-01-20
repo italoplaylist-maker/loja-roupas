@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+
+        :root {
+            --primary: {{ config.cor_primaria }};
+            --success: {{ config.cor_sucesso }};
+            --danger: {{ config.cor_perigo }};
+        }
         /* BOTÃO MENU */
         #menu-toggle {
             display: none;
@@ -78,15 +84,17 @@
     <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <h2 class="logo">
-            A Menina da Loja
+            {{ config.nome_loja }}
         </h2>
 
         <nav class="menu">
             <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
-            <a href="{{ url_for('listar_produtos') }}">👕 Produtos</a>
-            <a href="{{ url_for('novo_produto') }}">➕ Novo Produto</a>
-            <a href="#">👥 Clientes</a>
             <a href="{{ url_for('listar_vendas') }}">💰 Vendas</a>
+            <a href="{{ url_for('listar_produtos') }}">👕 Produtos</a>
+            <a href="#">📦 Fornecedores</a>
+            <a href="#">👥 Clientes</a>
+            <a href="{{ url_for('configuracoes') }}">⚙️ Configurações</a>
+            <a href="{{ url_for('configuracoes_usuarios') }}">👤 Usuários</a>
         </nav>
 
         <a class="logout" href="{{ url_for('logout') }}">🚪 Sair</a>

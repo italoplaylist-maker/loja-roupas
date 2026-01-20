@@ -1,32 +1,24 @@
 {% extends "base.html" %}
 
 {% block title %}Produtos{% endblock %}
-
-{% block header %}
-Produtos
-{% endblock %}
+{% block header %}Produtos{% endblock %}
 
 {% block content %}
 
 <div class="card">
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <!-- TOPO DO CARD -->
+    <div class="topo-card">
         <strong>Lista de Produtos</strong>
 
-        <a href="{{ url_for('novo_produto') }}" style="
-            background:#020617;
-            color:#fff;
-            text-decoration:none;
-            padding:10px 14px;
-            border-radius:8px;
-            font-size:14px;
-        ">
+        <a href="{{ url_for('novo_produto') }}" class="btn-primary">
             + Novo Produto
         </a>
     </div>
 
     {% if produtos %}
-    <table width="100%" cellspacing="0">
+
+    <table class="tabela-vendas">
         <thead>
             <tr>
                 <th>Foto</th>
@@ -39,48 +31,54 @@ Produtos
                 <th>Lucro Estoque</th>
             </tr>
         </thead>
+
         <tbody>
             {% for p in produtos %}
-            {% set lucro_unit = p.preco_venda - p.preco_custo %}
-            {% set lucro_total = lucro_unit * p.quantidade %}
+                {% set lucro_unit = p.preco_venda - p.preco_custo %}
+                {% set lucro_total = lucro_unit * p.quantidade %}
 
-            <tr>
-                <!-- FOTO -->
-                <td style="text-align:center;">
-                    {% if p.imagem %}
-                        <a href="{{ url_for('static', filename='uploads/' ~ p.imagem) }}" target="_blank">
-                            <img src="{{ url_for('static', filename='uploads/' ~ p.imagem) }}"
-                                style="width:50px;height:50px;object-fit:cover;border-radius:8px;">
-                        </a>
-                    {% else %}
-                        —
-                    {% endif %}
-                </td>
+                <tr>
+                    <!-- FOTO -->
+                    <td class="foto-produto">
+                        {% if p.imagem %}
+                            <a href="{{ url_for('static', filename='uploads/' ~ p.imagem) }}" target="_blank">
+                                <img src="{{ url_for('static', filename='uploads/' ~ p.imagem) }}">
+                            </a>
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
 
-                <td>{{ p.codigo }}</td>
-                <td>{{ p.nome }}</td>
+                    <td>{{ p.codigo }}</td>
+                    <td>{{ p.nome }}</td>
 
-                <td>R$ {{ "%.2f"|format(p.preco_custo) }}</td>
-                <td><strong>R$ {{ "%.2f"|format(p.preco_venda) }}</strong></td>
+                    <td>R$ {{ "%.2f"|format(p.preco_custo) }}</td>
 
-                <td style="color:green;">
-                    R$ {{ "%.2f"|format(lucro_unit) }}
-                </td>
+                    <td>
+                        <strong>R$ {{ "%.2f"|format(p.preco_venda) }}</strong>
+                    </td>
 
-                <td>{{ p.quantidade }}</td>
+                    <td>
+                        <span class="lucro-badge verde">
+                            R$ {{ "%.2f"|format(lucro_unit) }}
+                        </span>
+                    </td>
 
-                <td style="color:#0a7;">
-                    R$ {{ "%.2f"|format(lucro_total) }}
-                </td>
-            </tr>
+                    <td>{{ p.quantidade }}</td>
+
+                    <td>
+                        <span class="lucro-badge azul">
+                            R$ {{ "%.2f"|format(lucro_total) }}
+                        </span>
+                    </td>
+                </tr>
+
             {% endfor %}
         </tbody>
     </table>
 
-
-
     {% else %}
-        <p>Nenhum produto cadastrado.</p>
+        <p style="margin-top:10px;">Nenhum produto cadastrado.</p>
     {% endif %}
 
 </div>

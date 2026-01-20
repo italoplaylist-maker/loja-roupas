@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Editar Usuário{% endblock %}
+{% block header %}Editar Usuário{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h3>Editar Usuário</h3>
+    <form method="POST">
+        <label>Nome de usuário</label>
+        <input type="text" name="usuario" value="{{ usuario.usuario }}" required>
+
+        <label>Nova senha (opcional)</label>
+        <input type="password" name="senha">
+
+        <label>Confirme a nova senha</label>
+        <input type="password" name="senha_confirm">
+
+        <button type="submit">Salvar alterações</button>
+    </form>
+</div>
+{% endblock %}

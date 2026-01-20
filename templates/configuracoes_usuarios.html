@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Usuários{% endblock %}
+{% block header %}Usuários{% endblock %}
+
+{% block content %}
+
+<!-- CARD DE CADASTRO -->
+<div class="card">
+
+    <div class="topo-card">
+        <strong>Cadastrar Novo Usuário</strong>
+    </div>
+
+    <form method="POST" action="{{ url_for('novo_usuario') }}" class="form-grid">
+
+        <div>
+            <label>Nome de usuário</label>
+            <input type="text" name="usuario" required>
+        </div>
+
+        <div>
+            <label>Senha</label>
+            <input type="password" name="senha" required>
+        </div>
+
+        <div>
+            <label>Confirme a senha</label>
+            <input type="password" name="senha_confirm" required>
+        </div>
+
+        <button type="submit" class="btn-primary" style="margin-top:10px;">
+            Cadastrar
+        </button>
+
+    </form>
+</div>
+
+<!-- LISTA DE USUÁRIOS -->
+<div class="card" style="margin-top:22px;">
+
+    <div class="topo-card">
+        <strong>Usuários Existentes</strong>
+    </div>
+
+    <table class="tabela-vendas">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuário</th>
+                <th style="text-align:center;">Ações</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.usuario }}</td>
+
+                <td class="acoes">
+                    <a href="{{ url_for('editar_usuario', user_id=u.id) }}" class="acao editar">
+                        ✏
+                    </a>
+
+                    {% if u.id != current_user.id %}
+                    <a href="{{ url_for('excluir_usuario', user_id=u.id) }}"
+                       onclick="return confirm('Deseja realmente excluir?')"
+                       class="acao excluir">
+                       🗑
+                    </a>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
