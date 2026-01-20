@@ -1,31 +1,130 @@
 {% extends "base.html" %}
 
 {% block title %}Dashboard{% endblock %}
-
-{% block header %}
-Dashboard
-{% endblock %}
+{% block header %}Dashboard{% endblock %}
 
 {% block content %}
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;">
+
+<!-- FILTRO DE DATA -->
+<form method="get" style="display:flex;gap:10px;align-items:end;">
+    <div>
+        <label>Data início</label>
+        <input type="date" name="data_inicio" value="{{ request.args.get('data_inicio', '') }}">
+    </div>
+
+    <div>
+        <label>Data fim</label>
+        <input type="date" name="data_fim" value="{{ request.args.get('data_fim', '') }}">
+    </div>
+
+    <button type="submit">Filtrar</button>
+
+
+</form>
+
+
+
+<!-- FILTROS RÁPIDOS -->
+<div class="filtros-rapidos">
+    <a href="{{ url_for('dashboard', filtro='hoje') }}"
+       class="filtro {{ 'ativo' if filtro == 'hoje' else '' }}">
+        Hoje
+    </a>
+
+    <a href="{{ url_for('dashboard', filtro='7') }}"
+       class="filtro {{ 'ativo' if filtro == '7' else '' }}">
+        Últimos 7 dias
+    </a>
+
+    <a href="{{ url_for('dashboard', filtro='30') }}"
+       class="filtro {{ 'ativo' if filtro == '30' else '' }}">
+        Últimos 30 dias
+    </a>
+</div>
+
+
+<!-- CARDS -->
+<div class="grid-cards">
 
     <div class="card">
-        <span style="color:#64748b;">Produtos cadastrados</span>
-        <h2 style="margin-top:10px;">{{ total_produtos }}</h2>
+        <span>Total de Produtos</span>
+        <strong>{{ total_produtos }}</strong>
     </div>
 
     <div class="card">
-        <span style="color:#64748b;">Itens em estoque</span>
-        <h2 style="margin-top:10px;">{{ total_estoque }}</h2>
+        <span>Total em Estoque</span>
+        <strong>{{ total_estoque }}</strong>
     </div>
 
     <div class="card">
-        <span style="color:#64748b;">Valor total do estoque</span>
-        <h2 style="margin-top:10px;">
-            R$ {{ "%.2f"|format(valor_total) }}
-        </h2>
+        <span>Valor em Estoque</span>
+        <strong>R$ {{ "%.2f"|format(valor_estoque) }}</strong>
     </div>
+
+    <div class="card success">
+        <span>Vendas Hoje</span>
+        <strong>R$ {{ "%.2f"|format(vendas_dia) }}</strong>
+    </div>
+
+    <div class="card primary">
+        <span>Total Vendido</span>
+        <strong>R$ {{ "%.2f"|format(total_vendas) }}</strong>
+    </div>
+
+    <div class="card resumo">
+        <h3>Lucro no período</h3>
+        <strong style="color: #16a34a;">
+            R$ {{ "%.2f"|format(lucro_total) }}
+        </strong>
+        <small>
+            {{ 
+            "Hoje" if filtro == "hoje" 
+            else "Últimos 7 dias" if filtro == "7" 
+            else "Últimos 30 dias" 
+            }}
+        </small>
+    </div>
+
 
 </div>
+
+<!-- GRÁFICO -->
+<div class="card grafico">
+    <strong>Vendas por período</strong>
+    <canvas id="graficoVendas" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('graficoVendas');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ dias | tojson }},
+        datasets: [{
+            label: 'Vendas (R$)',
+            data: {{ valores | tojson }},
+            borderWidth: 3,
+            tension: 0.3,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                display: true
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
 
 {% endblock %}

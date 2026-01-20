@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Nova Venda{% endblock %}
+{% block header %}Nova Venda{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    {% if erro %}
+        <div style="color:#dc2626;margin-bottom:10px;">
+            {{ erro }}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        <label>Produto</label>
+        <select name="produto_id" id="produtoSelect" required>
+            <option value="">Selecione um produto</option>
+            {% for p in produtos %}
+                <option 
+                    value="{{ p.id }}"
+                    data-estoque="{{ p.quantidade }}"
+                >
+                    {{ p.nome }} (Estoque: {{ p.quantidade }})
+                </option>
+            {% endfor %}
+        </select>
+        <p id="estoqueInfo" style="margin-top:6px;font-weight:bold;"></p>
+
+
+        <label>Quantidade</label>
+        <input type="number" name="quantidade" required>
+
+        <label>Preço unitário</label>
+        <input type="number" step="0.01" name="preco_venda" required>
+
+        <label>Data da venda</label>
+        <input type="date" name="data_venda" value="{{ hoje }}" required>
+
+        <button type="submit">Registrar venda</button>
+    </form>
+
+
+</div>
+
+{% endblock %}

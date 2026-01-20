@@ -7,33 +7,38 @@ Novo Produto
 {% endblock %}
 
 {% block content %}
-<div class="card" style="max-width:500px;">
+<div class="card" style="max-width:500px; margin:auto;">
+
+    {% if erro %}
+        <div class="alert alert-danger" style="margin-bottom:15px;">
+            {{ erro }}
+        </div>
+    {% endif %}
+
     <form method="POST" enctype="multipart/form-data">
-        <span>Nome do produto</span>
-        <input type="text" name="nome" required
-            style="width:100%;padding:10px;margin-top:8px;margin-bottom:15px;">
 
-        <span>Preço</span>
-        <input type="number" step="0.01" name="preco" required
-            style="width:100%;padding:10px;margin-top:8px;margin-bottom:15px;">
+        <label>Código</label>
+        <input type="text" name="codigo" required>
 
-        <span>Quantidade</span>
-        <input type="number" name="quantidade" required
-            style="width:100%;padding:10px;margin-top:8px;margin-bottom:20px;">
+        <label>Nome</label>
+        <input type="text" name="nome" required>
 
-        <span>Imagem do produto</span>
-        <input type="file" name="imagem" accept="image/*"
-            style="width:100%;padding:10px;margin-bottom:20px;">
+        <label>Preço de custo</label>
+        <input type="number" name="preco_custo" step="0.01" min="0" required>
 
-        <button style="
-            background:#020617;
-            color:#fff;
-            border:none;
-            padding:12px 18px;
-            border-radius:8px;
-            cursor:pointer;">
-            Salvar
+        <label>Preço de venda</label>
+        <input type="number" name="preco_venda" step="0.01" min="0" required>
+
+        <label>Quantidade</label>
+        <input type="number" name="quantidade" min="0" required>
+
+        <label>Imagem</label>
+        <input type="file" name="imagem" accept="image/*">
+
+        <button type="submit" class="btn btn-primary" style="margin-top:15px; width:100%;">
+            Salvar Produto
         </button>
+
     </form>
 </div>
 {% endblock %}

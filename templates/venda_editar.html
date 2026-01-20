@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Venda{% endblock %}
+{% block header %}Editar Venda{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    {% if erro %}
+        <div style="color:#dc2626;">{{ erro }}</div>
+    {% endif %}
+
+    <form method="POST">
+
+        <label>Produto</label>
+        <input type="text" value="{{ venda.produto.nome }}" disabled>
+
+        <label>Quantidade</label>
+        <input type="number" name="quantidade" value="{{ venda.quantidade }}" min="1" required>
+
+        <label>Preço unitário</label>
+        <input type="number" step="0.01" name="preco_venda" value="{{ venda.preco_venda }}" required>
+
+        <label>Data da venda</label>
+        <input type="date" name="data_venda" value="{{ venda.data_venda }}" required>
+
+        <button type="submit">Salvar alterações</button>
+
+    </form>
+
+</div>
+
+{% endblock %}

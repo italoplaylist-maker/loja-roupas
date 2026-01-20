@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Vendas{% endblock %}
+{% block header %}Vendas{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+        <strong>Histórico de Vendas</strong>
+
+        <a href="{{ url_for('nova_venda') }}" class="btn-primary">
+            + Nova Venda
+        </a>
+    </div>
+
+    <p>
+        <strong>Total vendido:</strong>
+        R$ {{ "%.2f"|format(total_vendido) }}
+    </p>
+
+    {% if vendas %}
+    <table width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Produto</th>
+                <th>Qtd</th>
+                <th>Preço Unit.</th>
+                <th>Total</th>
+                <th>Data</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in vendas %}
+            <tr>
+
+                <td style="text-align:center;">
+                    {% if v.produto.imagem %}
+                        <a href="{{ url_for('static', filename='uploads/' ~ v.produto.imagem) }}" target="_blank">
+                            <img
+                                src="{{ url_for('static', filename='uploads/' ~ v.produto.imagem) }}"
+                                style="width:45px;height:45px;object-fit:cover;border-radius:6px;"
+                            >
+                        </a>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+
+                <td>{{ v.produto.nome }}</td>
+                <td>{{ v.quantidade }}</td>
+
+                <td>
+                    R$ {{ "%.2f"|format(v.preco_unitario) }}
+                </td>
+
+                <td>
+                    R$ {{ "%.2f"|format(v.quantidade * v.preco_unitario) }}
+                </td>
+
+                <td>
+                    {{ v.data.strftime("%d/%m/%Y") }}
+                </td>
+
+                <td>
+                    <a href="{{ url_for('editar_venda', venda_id=v.id) }}">
+                        ✏ Editar
+                    </a>
+                    |
+                    <a href="{{ url_for('excluir_venda', venda_id=v.id) }}"
+                       onclick="return confirm('Deseja excluir esta venda?')">
+                        🗑 Excluir
+                    </a>
+                </td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+        <p>Nenhuma venda registrada.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
