@@ -328,3 +328,120 @@ table th {
 }
 
 .total-vendas strong { font-size: 17px; }
+
+
+
+
+/* ========================= MOBILE UX FINAL ========================= */
+@media (max-width: 768px) {
+
+    /* Sidebar */
+    .sidebar {
+        width: 230px;
+        padding: 22px 18px;
+    }
+
+    .sidebar h2 {
+        font-size: 18px;
+        margin-bottom: 25px;
+    }
+
+    .sidebar a {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    /* Topbar */
+    .topbar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 16px;
+        padding: 14px 16px;
+    }
+
+    /* Conteúdo */
+    .content {
+        padding: 16px;
+    }
+
+    /* Cards */
+    .grid-cards {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .grid-cards .card strong {
+        font-size: 22px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+
+    /* Gráficos */
+    .card.grafico {
+        padding: 18px;
+        overflow-x: auto;
+    }
+
+    .card.grafico canvas {
+        min-width: 320px;
+    }
+
+    /* Formulários */
+    input, select, button {
+        font-size: 16px; /* evita zoom automático no iOS */
+    }
+
+    .form-grid {
+        gap: 12px;
+    }
+
+    /* Botões */
+    button,
+    .btn-primary {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Tabelas */
+    table {
+        font-size: 13px;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        width: 100%;
+    }
+
+    /* Ações */
+    .acoes {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .acao {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    /* Filtros */
+    .filtros-rapidos {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .filtro {
+        font-size: 13px;
+        padding: 6px 14px;
+    }
+
+    /* Total vendas */
+    .total-vendas {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}
