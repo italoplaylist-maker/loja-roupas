@@ -445,3 +445,64 @@ table th {
         gap: 6px;
     }
 }
+
+
+/* ================= MOBILE FIX GERAL ================= */
+@media (max-width: 768px) {
+
+    /* força tudo caber na tela */
+    body, html {
+        overflow-x: hidden;
+    }
+
+    /* cards em coluna única */
+    .grid,
+    .grid-cards {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* remove efeitos que quebram mobile */
+    .card:hover,
+    .sidebar a:hover {
+        transform: none;
+    }
+
+    /* conteúdo mais compacto */
+    .content {
+        padding: 14px;
+    }
+
+    /* ================= TABELAS ================= */
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 600px;
+    }
+
+    table th,
+    table td {
+        white-space: nowrap;
+        font-size: 13px;
+    }
+
+    /* ações não quebra linha */
+    .acoes {
+        white-space: nowrap;
+    }
+
+    /* ================= TOPBAR ================= */
+    .topbar h1 {
+        font-size: 17px;
+        line-height: 1.2;
+    }
+
+    /* ================= SIDEBAR ================= */
+    .sidebar {
+        width: 85%;
+        max-width: 280px;
+    }
+}
