@@ -5,16 +5,81 @@
     <title>{% block title %}Loja{% endblock %}</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        /* BOTÃO MENU */
+        #menu-toggle {
+            display: none;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            font-size: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        /* MOBILE */
+        @media (max-width: 768px) {
+            #menu-toggle {
+                display: inline-block;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -250px; /* escondida inicialmente */
+                top: 0;
+                height: 100%;
+                width: 230px;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                padding: 25px 20px;
+                display: flex;
+                flex-direction: column;
+                background: var(--sidebar);
+                box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+            }
+
+            .sidebar.active {
+                left: 0; /* quando aberta */
+            }
+
+            .main {
+                margin-left: 0; /* conteúdo ocupa toda a tela */
+                z-index: 0;
+            }
+        }
+
+        /* Ajuste do topo para botão */
+        .topbar {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 18px 25px;
+            border-bottom: 1px solid var(--border);
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            margin-right: 8px;
+        }
+    </style>
 </head>
 <body>
 
 <div class="wrapper">
 
     <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <h2 class="logo">A Menina da Loja</h2>
+    <aside class="sidebar" id="sidebar">
+        <h2 class="logo">
+            A Menina da Loja
+        </h2>
 
         <nav class="menu">
             <a href="{{ url_for('dashboard') }}">🏠 Dashboard</a>
@@ -32,6 +97,7 @@
 
         <!-- TOPO -->
         <header class="topbar">
+            <button id="menu-toggle">☰</button>
             <h1>{% block header %}{% endblock %}</h1>
         </header>
 
@@ -43,6 +109,15 @@
     </main>
 
 </div>
+
+<script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+    });
+</script>
 
 </body>
 </html>
