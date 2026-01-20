@@ -5,8 +5,118 @@
 
 {% block content %}
 
-<!-- FILTRO DE DATA -->
-<form method="get" style="display:flex;gap:10px;align-items:end;">
+<!-- ÍCONES -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+    .grid-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    /* CARD PADRÃO */
+    .card {
+        background: rgba(255,255,255,0.85);
+        padding: 18px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        transition: .2s;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    /* BORDA COLORIDA */
+    .card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 7px;
+        height: 100%;
+        border-radius: 12px 0 0 12px;
+    }
+
+    /* CORES ESPECÍFICAS */
+    .produtos::before { background:#6366f1; }
+    .estoque::before { background:#0ea5e9; }
+    .valor::before { background:#14b8a6; }
+    .hoje::before { background:#22c55e; }
+    .total::before { background:#2563eb; }
+    .lucro::before { background:#f59e0b; }
+    .grafico::before { background:#3b82f6; }
+
+    .card i {
+        font-size: 24px;
+        opacity: .9;
+        margin-bottom: 4px;
+    }
+
+    /* FILTROS RÁPIDOS */
+    .filtros-rapidos {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .filtro {
+        padding: 8px 16px;
+        border-radius: 8px;
+        background: #e5e7eb;
+        color: #111;
+        text-decoration: none;
+        font-weight: 500;
+        transition: .2s;
+    }
+
+    .filtro:hover {
+        background: #d1d5db;
+    }
+
+    .filtro.ativo {
+        background: #3b82f6;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    /* TEXTO DOS CARDS */
+    .card span {
+        color:#444;
+        font-size:14px;
+        font-weight:500;
+    }
+
+    .card strong {
+        font-size:22px;
+        font-weight:700;
+    }
+
+    .card.lucro {
+        background: linear-gradient(135deg,#fbbf24,#d97706);
+        color: white;
+    }
+
+    .card.lucro span,
+    .card.lucro small {
+        color: #fff8d6;
+    }
+
+</style>
+
+
+
+<!-- FILTRO POR DATA -->
+<form method="get" style="display:flex;gap:10px;align-items:end;margin-bottom:20px;">
     <div>
         <label>Data início</label>
         <input type="date" name="data_inicio" value="{{ request.args.get('data_inicio', '') }}">
@@ -18,81 +128,88 @@
     </div>
 
     <button type="submit">Filtrar</button>
-
-
 </form>
-
 
 
 <!-- FILTROS RÁPIDOS -->
 <div class="filtros-rapidos">
+
     <a href="{{ url_for('dashboard', filtro='hoje') }}"
        class="filtro {{ 'ativo' if filtro == 'hoje' else '' }}">
-        Hoje
+       Hoje
     </a>
 
     <a href="{{ url_for('dashboard', filtro='7') }}"
        class="filtro {{ 'ativo' if filtro == '7' else '' }}">
-        Últimos 7 dias
+       Últimos 7 dias
     </a>
 
     <a href="{{ url_for('dashboard', filtro='30') }}"
        class="filtro {{ 'ativo' if filtro == '30' else '' }}">
-        Últimos 30 dias
+       Últimos 30 dias
     </a>
 </div>
+
 
 
 <!-- CARDS -->
 <div class="grid-cards">
 
-    <div class="card">
+    <div class="card produtos">
+        <i class="fa-solid fa-boxes-stacked"></i>
         <span>Total de Produtos</span>
         <strong>{{ total_produtos }}</strong>
     </div>
 
-    <div class="card">
+    <div class="card estoque">
+        <i class="fa-solid fa-warehouse"></i>
         <span>Total em Estoque</span>
         <strong>{{ total_estoque }}</strong>
     </div>
 
-    <div class="card">
+    <div class="card valor">
+        <i class="fa-solid fa-hand-holding-dollar"></i>
         <span>Valor em Estoque</span>
         <strong>R$ {{ "%.2f"|format(valor_estoque) }}</strong>
     </div>
 
-    <div class="card success">
+    <div class="card hoje">
+        <i class="fa-solid fa-cash-register"></i>
         <span>Vendas Hoje</span>
         <strong>R$ {{ "%.2f"|format(vendas_dia) }}</strong>
     </div>
 
-    <div class="card primary">
+    <div class="card total">
+        <i class="fa-solid fa-cart-shopping"></i>
         <span>Total Vendido</span>
         <strong>R$ {{ "%.2f"|format(total_vendas) }}</strong>
     </div>
 
-    <div class="card resumo">
+    <div class="card lucro">
+        <i class="fa-solid fa-coins"></i>
         <h3>Lucro no período</h3>
-        <strong style="color: #16a34a;">
-            R$ {{ "%.2f"|format(lucro_total) }}
-        </strong>
+        <strong>R$ {{ "%.2f"|format(lucro_total) }}</strong>
         <small>
             {{ 
-            "Hoje" if filtro == "hoje" 
-            else "Últimos 7 dias" if filtro == "7" 
-            else "Últimos 30 dias" 
+                "Hoje" if filtro == "hoje"
+                else "Últimos 7 dias" if filtro == "7"
+                else "Últimos 30 dias"
             }}
         </small>
     </div>
 
-
 </div>
+
+
 
 <!-- GRÁFICO -->
-<div class="card grafico">
-    <strong>Vendas por período</strong>
+<div class="card grafico" style="margin-top: 25px;">
+    <i class="fa-solid fa-chart-line"></i>
+    <strong style="margin-bottom:10px;">Vendas por período</strong>
     <canvas id="graficoVendas" height="120"></canvas>
 </div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -113,16 +230,7 @@ new Chart(ctx, {
     },
     options: {
         responsive: true,
-        plugins: {
-            legend: {
-                display: true
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
+        scales: { y: { beginAtZero: true } }
     }
 });
 </script>
