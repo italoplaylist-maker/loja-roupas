@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
-
+    /* ================= GRID CARDS ================= */
     .grid-cards {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -17,7 +17,7 @@
         margin-top: 20px;
     }
 
-    /* CARD PADRÃO */
+    /* ================= CARD PADRÃO ================= */
     .card {
         background: rgba(255,255,255,0.85);
         padding: 18px;
@@ -62,6 +62,28 @@
         margin-bottom: 4px;
     }
 
+    /* TEXTO DOS CARDS */
+    .card span {
+        color:#444;
+        font-size:14px;
+        font-weight:500;
+    }
+
+    .card strong {
+        font-size:22px;
+        font-weight:700;
+    }
+
+    .card.lucro {
+        background: linear-gradient(135deg,#fbbf24,#d97706);
+        color: white;
+    }
+
+    .card.lucro span,
+    .card.lucro small {
+        color: #fff8d6;
+    }
+
     /* FILTROS RÁPIDOS */
     .filtros-rapidos {
         margin-top: 20px;
@@ -89,31 +111,47 @@
         font-weight: bold;
     }
 
-    /* TEXTO DOS CARDS */
-    .card span {
-        color:#444;
-        font-size:14px;
-        font-weight:500;
+    /* ================= GRÁFICO ================= */
+    .card.grafico {
+        padding: 16px;
     }
 
-    .card strong {
-        font-size:22px;
-        font-weight:700;
+    .grafico-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #111;
+        margin-bottom: 10px;
     }
 
-    .card.lucro {
-        background: linear-gradient(135deg,#fbbf24,#d97706);
-        color: white;
+    .grafico-header i {
+        font-size: 14px;
+        color: #3b82f6;
     }
 
-    .card.lucro span,
-    .card.lucro small {
-        color: #fff8d6;
+    .grafico-body {
+        position: relative;
+        width: 100%;
+        height: 140px;
     }
 
+    /* RESPONSIVO */
+    @media (max-width: 768px) {
+        .grafico-body {
+            height: 110px;
+        }
+
+        .grid-cards {
+            grid-template-columns: 1fr;
+        }
+
+        .card strong {
+            font-size: 20px;
+        }
+    }
 </style>
-
-
 
 <!-- FILTRO POR DATA -->
 <form method="get" style="display:flex;gap:10px;align-items:end;margin-bottom:20px;">
@@ -130,34 +168,19 @@
     <button type="submit">Filtrar</button>
 </form>
 
-
 <!-- FILTROS RÁPIDOS -->
 <div class="filtros-rapidos">
-
-    <a href="{{ url_for('dashboard', filtro='hoje') }}"
-       class="filtro {{ 'ativo' if filtro == 'hoje' else '' }}">
-       Hoje
-    </a>
-
-    <a href="{{ url_for('dashboard', filtro='7') }}"
-       class="filtro {{ 'ativo' if filtro == '7' else '' }}">
-       Últimos 7 dias
-    </a>
-
-    <a href="{{ url_for('dashboard', filtro='30') }}"
-       class="filtro {{ 'ativo' if filtro == '30' else '' }}">
-       Últimos 30 dias
-    </a>
+    <a href="{{ url_for('dashboard', filtro='hoje') }}" class="filtro {{ 'ativo' if filtro == 'hoje' else '' }}">Hoje</a>
+    <a href="{{ url_for('dashboard', filtro='7') }}" class="filtro {{ 'ativo' if filtro == '7' else '' }}">Últimos 7 dias</a>
+    <a href="{{ url_for('dashboard', filtro='30') }}" class="filtro {{ 'ativo' if filtro == '30' else '' }}">Últimos 30 dias</a>
 </div>
-
-
 
 <!-- CARDS -->
 <div class="grid-cards">
 
     <div class="card produtos">
         <i class="fa-solid fa-boxes-stacked"></i>
-        <span>Total de Produtos</span>
+        <span>Produtos Ativos</span>
         <strong>{{ total_produtos }}</strong>
     </div>
 
@@ -190,48 +213,59 @@
         <h3>Lucro no período</h3>
         <strong>R$ {{ "%.2f"|format(lucro_total) }}</strong>
         <small>
-            {{ 
-                "Hoje" if filtro == "hoje"
-                else "Últimos 7 dias" if filtro == "7"
-                else "Últimos 30 dias"
-            }}
+            {{ "Hoje" if filtro == "hoje"
+               else "Últimos 7 dias" if filtro == "7"
+               else "Últimos 30 dias" }}
         </small>
     </div>
 
 </div>
 
-
-
 <!-- GRÁFICO -->
-<div class="card grafico" style="margin-top: 25px;">
-    <i class="fa-solid fa-chart-line"></i>
-    <strong style="margin-bottom:10px;">Vendas por período</strong>
-    <canvas id="graficoVendas" height="120"></canvas>
+<div class="card grafico">
+    <div class="grafico-header">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Vendas por período</span>
+    </div>
+
+    <div class="grafico-body">
+        <canvas id="graficoVendas"></canvas>
+    </div>
 </div>
 
-
-
+<!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-const ctx = document.getElementById('graficoVendas');
+document.addEventListener('DOMContentLoaded', function () {
+    const canvas = document.getElementById('graficoVendas');
+    if (!canvas) return;
 
-new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: {{ dias | tojson }},
-        datasets: [{
-            label: 'Vendas (R$)',
-            data: {{ valores | tojson }},
-            borderWidth: 3,
-            tension: 0.3,
-            fill: true
-        }]
-    },
-    options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true } }
-    }
+    new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels: {{ dias | tojson }},
+            datasets: [{
+                label: 'Vendas (R$)',
+                data: {{ valores | tojson }},
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59,130,246,0.2)',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { beginAtZero: true }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
 });
 </script>
 

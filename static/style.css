@@ -139,16 +139,35 @@ body {
 .card-success { border-left: 6px solid var(--success); }
 .card-primary { border-left: 6px solid var(--primary); }
 
+/* ========================= GRÁFICO ========================= */
+
 .card.grafico {
     margin-top: 15px;
-    padding: 25px;
+    padding: 16px;
 }
 
-.card.grafico h3 {
-    margin-bottom: 18px;
-    font-size: 17px;
-    font-weight: 600;
+.grafico-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 10px;
 }
+
+.grafico-header i {
+    font-size: 14px;
+    color: var(--primary);
+}
+
+.grafico-body {
+    position: relative;
+    width: 100%;
+    height: 140px; /* desktop */
+}
+
+
 
 /* ========================= FORMULÁRIOS ========================= */
 form label {
@@ -197,6 +216,7 @@ button {
 .btn-primary {
     text-decoration: none;
     color: #fff;
+    background-color: var(--primary);
     display: inline-block;
     padding: 9px 14px;
 }
@@ -258,7 +278,7 @@ table th {
 }
 
 .filtro:hover { background: #d1d5db; transform: translateY(-2px); }
-.filtro.ativo { background: var(--primary); color: #fff; }
+.filtro.ativo { class: "btn-primary"; color: #fff; }
 
 /* ========================= RESPONSIVO ========================= */
 @media (max-width: 768px) {
@@ -331,178 +351,3 @@ table th {
 
 
 
-
-/* ========================= MOBILE UX FINAL ========================= */
-@media (max-width: 768px) {
-
-    /* Sidebar */
-    .sidebar {
-        width: 230px;
-        padding: 22px 18px;
-    }
-
-    .sidebar h2 {
-        font-size: 18px;
-        margin-bottom: 25px;
-    }
-
-    .sidebar a {
-        font-size: 14px;
-        padding: 12px;
-    }
-
-    /* Topbar */
-    .topbar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 16px;
-        padding: 14px 16px;
-    }
-
-    /* Conteúdo */
-    .content {
-        padding: 16px;
-    }
-
-    /* Cards */
-    .grid-cards {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .grid-cards .card strong {
-        font-size: 22px;
-    }
-
-    .card {
-        padding: 16px;
-    }
-
-    /* Gráficos */
-    .card.grafico {
-        padding: 18px;
-        overflow-x: auto;
-    }
-
-    .card.grafico canvas {
-        min-width: 320px;
-    }
-
-    /* Formulários */
-    input, select, button {
-        font-size: 16px; /* evita zoom automático no iOS */
-    }
-
-    .form-grid {
-        gap: 12px;
-    }
-
-    /* Botões */
-    button,
-    .btn-primary {
-        width: 100%;
-        padding: 12px;
-    }
-
-    /* Tabelas */
-    table {
-        font-size: 13px;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-        width: 100%;
-    }
-
-    /* Ações */
-    .acoes {
-        display: flex;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .acao {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-
-    /* Filtros */
-    .filtros-rapidos {
-        flex-wrap: wrap;
-        gap: 8px;
-    }
-
-    .filtro {
-        font-size: 13px;
-        padding: 6px 14px;
-    }
-
-    /* Total vendas */
-    .total-vendas {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
-    }
-}
-
-
-/* ================= MOBILE FIX GERAL ================= */
-@media (max-width: 768px) {
-
-    /* força tudo caber na tela */
-    body, html {
-        overflow-x: hidden;
-    }
-
-    /* cards em coluna única */
-    .grid,
-    .grid-cards {
-        grid-template-columns: 1fr !important;
-    }
-
-    /* remove efeitos que quebram mobile */
-    .card:hover,
-    .sidebar a:hover {
-        transform: none;
-    }
-
-    /* conteúdo mais compacto */
-    .content {
-        padding: 14px;
-    }
-
-    /* ================= TABELAS ================= */
-    .table-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    table {
-        min-width: 600px;
-    }
-
-    table th,
-    table td {
-        white-space: nowrap;
-        font-size: 13px;
-    }
-
-    /* ações não quebra linha */
-    .acoes {
-        white-space: nowrap;
-    }
-
-    /* ================= TOPBAR ================= */
-    .topbar h1 {
-        font-size: 17px;
-        line-height: 1.2;
-    }
-
-    /* ================= SIDEBAR ================= */
-    .sidebar {
-        width: 85%;
-        max-width: 280px;
-    }
-}
